@@ -1,0 +1,53 @@
+---
+paths:
+  /search/{name}:
+    get:
+      x-amazon-apigateway-integration:
+        responses: {}
+        uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaHandler.Arn}/invocations
+        credentials: !GetAtt APIGatewayInvokeLambdaRole.Arn
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /heroes:
+    get:
+      x-amazon-apigateway-integration:
+        responses: {}
+        uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaHandler.Arn}/invocations
+        credentials: !GetAtt APIGatewayInvokeLambdaRole.Arn
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    post:
+      x-amazon-apigateway-integration:
+        responses: {}
+        uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaHandler.Arn}/invocations
+        credentials: !GetAtt APIGatewayInvokeLambdaRole.Arn
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    put:
+      x-amazon-apigateway-integration:
+        responses: {}
+        uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaHandler.Arn}/invocations
+        credentials: !GetAtt APIGatewayInvokeLambdaRole.Arn
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /heroes/{id}:
+    get:
+      x-amazon-apigateway-integration:
+        responses: {}
+        uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaHandler.Arn}/invocations
+        credentials: !GetAtt APIGatewayInvokeLambdaRole.Arn
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    delete:
+      x-amazon-apigateway-integration:
+        responses: {}
+        uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaHandler.Arn}/invocations
+        credentials: !GetAtt APIGatewayInvokeLambdaRole.Arn
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy

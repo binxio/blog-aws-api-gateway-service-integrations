@@ -1,0 +1,78 @@
+{
+  "resource": "/heroes/{id}",
+  "path": "/heroes/1",
+  "httpMethod": "GET",
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate",
+    "Host": "b1eyj864ud.execute-api.eu-west-1.amazonaws.com",
+    "User-Agent": "HTTPie/0.9.9",
+    "X-Amzn-Trace-Id": "Root=1-5bced43d-c6873d645fc73387eb34a02e",
+    "X-Forwarded-For": "37.17.208.21",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "multiValueHeaders": {
+    "Accept": [
+      "*/*"
+    ],
+    "Accept-Encoding": [
+      "gzip, deflate"
+    ],
+    "Host": [
+      "b1eyj864ud.execute-api.eu-west-1.amazonaws.com"
+    ],
+    "User-Agent": [
+      "HTTPie/0.9.9"
+    ],
+    "X-Amzn-Trace-Id": [
+      "Root=1-5bced43d-c6873d645fc73387eb34a02e"
+    ],
+    "X-Forwarded-For": [
+      "37.17.208.21"
+    ],
+    "X-Forwarded-Port": [
+      "443"
+    ],
+    "X-Forwarded-Proto": [
+      "https"
+    ]
+  },
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": {
+    "id": "1"
+  },
+  "stageVariables": null,
+  "requestContext": {
+    "resourceId": "jxyki1",
+    "resourcePath": "/heroes/{id}",
+    "httpMethod": "GET",
+    "extendedRequestId": "PNYZnEHijoEFQbA=",
+    "requestTime": "23/Oct/2018:07:56:45 +0000",
+    "path": "/prod/heroes/1",
+    "accountId": "612483924670",
+    "protocol": "HTTP/1.1",
+    "stage": "prod",
+    "domainPrefix": "b1eyj864ud",
+    "requestTimeEpoch": 1540281405554,
+    "requestId": "2fd37f02-d699-11e8-9960-514cafb48503",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "37.17.208.21",
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "HTTPie/0.9.9",
+      "user": null
+    },
+    "domainName": "b1eyj864ud.execute-api.eu-west-1.amazonaws.com",
+    "apiId": "b1eyj864ud"
+  },
+  "body": null,
+  "isBase64Encoded": false
+}

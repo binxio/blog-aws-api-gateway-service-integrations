@@ -1,0 +1,76 @@
+{
+  "resource": "/heroes",
+  "path": "/heroes",
+  "httpMethod": "GET",
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate",
+    "Host": "b1eyj864ud.execute-api.eu-west-1.amazonaws.com",
+    "User-Agent": "HTTPie/0.9.9",
+    "X-Amzn-Trace-Id": "Root=1-5bced31f-9d7258ae9cd5fb5848335dd6",
+    "X-Forwarded-For": "37.17.208.21",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "multiValueHeaders": {
+    "Accept": [
+      "*/*"
+    ],
+    "Accept-Encoding": [
+      "gzip, deflate"
+    ],
+    "Host": [
+      "b1eyj864ud.execute-api.eu-west-1.amazonaws.com"
+    ],
+    "User-Agent": [
+      "HTTPie/0.9.9"
+    ],
+    "X-Amzn-Trace-Id": [
+      "Root=1-5bced31f-9d7258ae9cd5fb5848335dd6"
+    ],
+    "X-Forwarded-For": [
+      "37.17.208.21"
+    ],
+    "X-Forwarded-Port": [
+      "443"
+    ],
+    "X-Forwarded-Proto": [
+      "https"
+    ]
+  },
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "resourceId": "ns43gd",
+    "resourcePath": "/heroes",
+    "httpMethod": "GET",
+    "extendedRequestId": "PNXs6FVEDoEF_DA=",
+    "requestTime": "23/Oct/2018:07:51:59 +0000",
+    "path": "/prod/heroes",
+    "accountId": "612483924670",
+    "protocol": "HTTP/1.1",
+    "stage": "prod",
+    "domainPrefix": "b1eyj864ud",
+    "requestTimeEpoch": 1540281119455,
+    "requestId": "854c67d3-d698-11e8-ba1f-41d3f22c39c8",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "37.17.208.21",
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "HTTPie/0.9.9",
+      "user": null
+    },
+    "domainName": "b1eyj864ud.execute-api.eu-west-1.amazonaws.com",
+    "apiId": "b1eyj864ud"
+  },
+  "body": null,
+  "isBase64Encoded": false
+}

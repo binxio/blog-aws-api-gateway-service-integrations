@@ -1,0 +1,80 @@
+{
+  "resource": "/heroes",
+  "path": "/heroes",
+  "httpMethod": "POST",
+  "headers": {
+    "Accept": "application/json, */*",
+    "Accept-Encoding": "gzip, deflate",
+    "Content-Type": "application/json",
+    "Host": "b1eyj864ud.execute-api.eu-west-1.amazonaws.com",
+    "User-Agent": "HTTPie/0.9.9",
+    "X-Amzn-Trace-Id": "Root=1-5bcee1b3-7660dcdcb55776340af9917a",
+    "X-Forwarded-For": "37.17.208.21",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "multiValueHeaders": {
+    "Accept": [
+      "application/json, */*"
+    ],
+    "Accept-Encoding": [
+      "gzip, deflate"
+    ],
+    "Content-Type": [
+      "application/json"
+    ],
+    "Host": [
+      "b1eyj864ud.execute-api.eu-west-1.amazonaws.com"
+    ],
+    "User-Agent": [
+      "HTTPie/0.9.9"
+    ],
+    "X-Amzn-Trace-Id": [
+      "Root=1-5bcee1b3-7660dcdcb55776340af9917a"
+    ],
+    "X-Forwarded-For": [
+      "37.17.208.21"
+    ],
+    "X-Forwarded-Port": [
+      "443"
+    ],
+    "X-Forwarded-Proto": [
+      "https"
+    ]
+  },
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "resourceId": "ns43gd",
+    "resourcePath": "/heroes",
+    "httpMethod": "POST",
+    "extendedRequestId": "PNg0EH9QjoEF63Q=",
+    "requestTime": "23/Oct/2018:08:54:11 +0000",
+    "path": "/prod/heroes",
+    "accountId": "612483924670",
+    "protocol": "HTTP/1.1",
+    "stage": "prod",
+    "domainPrefix": "b1eyj864ud",
+    "requestTimeEpoch": 1540284851642,
+    "requestId": "35daf1c0-d6a1-11e8-bc1a-45f494494843",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "37.17.208.21",
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "HTTPie/0.9.9",
+      "user": null
+    },
+    "domainName": "b1eyj864ud.execute-api.eu-west-1.amazonaws.com",
+    "apiId": "b1eyj864ud"
+  },
+  "body": "{\"name\": \"foo\"}",
+  "isBase64Encoded": false
+}
