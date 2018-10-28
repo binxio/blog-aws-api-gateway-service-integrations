@@ -1,0 +1,385 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 05-tour-of-heroes
+
+Resources:
+  APIGatewayRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: apigateway.amazonaws.com
+          Action: sts:AssumeRole
+          Condition: {}
+      Path: /
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+
+  HeroesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: heroes
+      AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: N
+      KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+  RestAPIDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref RestAPIv2
+      StageName: prod
+
+  RestAPIv2:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      EndpointConfiguration:
+        Types:
+        - REGIONAL
+
+
+      Body:
+        info:
+          description: Tour of Heroes API
+          title: Tour Of Heroes
+          version: 1.0.0
+        paths:
+          /api/search/{name}:
+            get:
+              x-amazon-apigateway-integration:
+                passthroughBehavior: when_no_templates
+                responses:
+                  default:
+                    responseTemplates:
+                      application/json: |-
+                        [
+                        #foreach ($item in $input.path('$.Items'))
+                        {
+                            "id": "$item.id.N",
+                            "name": "$item.name.S"
+                        }
+                        #if($foreach.hasNext), #end
+                        #end
+                        ]
+                    statusCode: '200'
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/Scan"
+                httpMethod: POST
+                requestTemplates:
+                  application/json: !Sub |
+                    {
+                        "TableName": "${HeroesTable}",
+                        "ScanFilter": {
+                          "name": {
+                            "AttributeValueList":[ {"S":"$input.params('name')"} ],
+                             "ComparisonOperator": "CONTAINS"
+                          }
+                        }
+                    }
+                credentials: !GetAtt APIGatewayRole.Arn
+                type: aws
+              summary: Search for heroes
+              responses:
+                '200':
+                  description: Return a list of heroes
+                  headers:
+                    Content-Type:
+                      type: string
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
+                  schema:
+                    $ref: '#/definitions/Heroes'
+              parameters:
+              - in: path
+                name: name
+                type: string
+                required: true
+              produces:
+              - application/json
+          /api/heroes/{id}:
+            get:
+              x-amazon-apigateway-integration:
+                passthroughBehavior: when_no_templates
+                responses:
+                  default:
+                    responseTemplates:
+                      application/json: |-
+                        #if ($input.body == '{}')
+                          $input.body
+                        #set($context.responseOverride.status = 404)
+                        #else
+                        {
+                          "id": $input.json('$.Item.id.N'),
+                          "name": $input.json('$.Item.name.S')
+                        }
+                        #end
+                    statusCode: '200'
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/GetItem"
+                httpMethod: POST
+                requestTemplates:
+                  application/json: !Sub |
+                    {
+                      "TableName": "${HeroesTable}",
+                      "Key": {
+                        "id": {
+                          "N": "$input.params('id')"
+                        }
+                      }
+                    }
+                credentials: !GetAtt APIGatewayRole.Arn
+                type: aws
+              summary: get hero by id
+              responses:
+                '200':
+                  description: hero is found
+                  headers:
+                    Content-Type:
+                      type: string
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
+                  schema:
+                    $ref: '#/definitions/Hero'
+                '404':
+                  description: hero is not found
+                  headers:
+                    Content-Type:
+                      type: string
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
+              parameters:
+              - in: path
+                name: id
+                type: number
+                required: true
+              produces:
+              - application/json
+            delete:
+              x-amazon-apigateway-integration:
+                passthroughBehavior: when_no_templates
+                responses:
+                  default:
+                    statusCode: '200'
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/DeleteItem"
+                httpMethod: POST
+                requestTemplates:
+                  application/json: !Sub |
+                    {
+                      "TableName": "${HeroesTable}",
+                      "Key": {
+                        "id": {
+                          "N": "$input.params('id')"
+                        }
+                      }
+                    }
+                credentials: !GetAtt APIGatewayRole.Arn
+                type: aws
+              responses:
+                '200':
+                  description: hero is deleted
+                  headers:
+                    Content-Type:
+                      type: string
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
+                  schema:
+                    $ref: '#/definitions/Hero'
+                '404':
+                  description: hero is not found
+                  headers:
+                    Content-Type:
+                      type: string
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
+              parameters:
+              - in: path
+                name: id
+                type: number
+                required: true
+              summary: Delete a hero
+          /api/heroes:
+            put:
+              responses:
+                '200':
+                  description: Updated hero
+                  headers:
+                    Content-Type:
+                      type: string
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
+                  schema:
+                    $ref: '#/definitions/Hero'
+              parameters:
+              - in: body
+                name: hero
+                required: true
+                schema:
+                  $ref: '#/definitions/Hero'
+              produces:
+              - application/json
+              x-amazon-apigateway-integration:
+                passthroughBehavior: when_no_templates
+                responses:
+                  default:
+                    statusCode: '200'
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/UpdateItem"
+                httpMethod: POST
+                requestTemplates:
+                  application/json: !Sub |
+                    {
+                        "TableName": "${HeroesTable}",
+                        "Key": {
+                          "id": {
+                            "N": $input.json('$.id')
+                          }
+                        },
+                        "UpdateExpression": "SET #n = :p",
+                        "ExpressionAttributeValues": {
+                          ":p": { "S" : $input.json('$.name') }
+                        },
+                        "ExpressionAttributeNames": {"#n":"name"}
+                    }
+                credentials: !GetAtt APIGatewayRole.Arn
+                type: aws
+              summary: Update a hero
+              consumes:
+              - application/json
+            post:
+              responses:
+                '200':
+                  description: New hero
+                  headers:
+                    Content-Type:
+                      type: string
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
+                  schema:
+                    $ref: '#/definitions/Hero'
+              parameters:
+              - in: body
+                name: hero
+                required: true
+                schema:
+                  $ref: '#/definitions/Hero'
+              produces:
+              - application/json
+              x-amazon-apigateway-integration:
+                passthroughBehavior: when_no_templates
+                responses:
+                  default:
+                    statusCode: '200'
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/PutItem"
+                httpMethod: POST
+                requestTemplates:
+                  application/json: !Sub |
+                    {
+                        "TableName": "${HeroesTable}",
+                        "Item": {
+                            "id": {
+                                "N": $input.json('$.id')
+                            },
+                            "name": {
+                                "S": $input.json('$.name')
+                            }
+                        }
+                    }
+                credentials: !GetAtt APIGatewayRole.Arn
+                type: aws
+              summary: Add a new hero
+              consumes:
+              - application/json
+            get:
+              x-amazon-apigateway-integration:
+                passthroughBehavior: when_no_templates
+                responses:
+                  default:
+                    responseTemplates:
+                      application/json: |-
+                        [
+                        #foreach ($item in $input.path('$.Items'))
+                        {
+                            "id": "$item.id.N",
+                            "name": "$item.name.S"
+                        }
+                        #if($foreach.hasNext), #end
+                        #end
+                        ]
+                    statusCode: '200'
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/Scan"
+                httpMethod: POST
+                requestTemplates:
+                  application/json: !Sub |
+                    {
+                        "TableName": "${HeroesTable}"
+                    }
+                credentials: !GetAtt APIGatewayRole.Arn
+                type: aws
+              summary: Return a list of heroes
+              responses:
+                '200':
+                  description: Return a list of heroes
+                  headers:
+                    Content-Type:
+                      type: string
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
+                  schema:
+                    $ref: '#/definitions/Heroes'
+              produces:
+              - application/json
+        swagger: '2.0'
+        schemes:
+        - https
+        definitions:
+          Heroes:
+            type: array
+            items:
+              $ref: '#/definitions/Hero'
+          Hero:
+            type: object
+            required:
+            - id
+            - name
+            properties:
+              id:
+                type: number
+              name:
+                type: string
+

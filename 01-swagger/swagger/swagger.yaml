@@ -1,0 +1,133 @@
+---
+swagger: '2.0'
+info:
+  description: 'Tour of Heroes API'
+  title: 'Tour Of Heroes'
+  version: '1.0.0'
+schemes:
+  - https
+paths:
+  /search/{name}:
+    get:
+      summary: 'Search for heroes'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: path
+          name: name
+          type: string
+          required: true
+      responses:
+        '200':
+          description: 'Return a list of heroes'
+          headers:
+            Content-Type:
+              type: string
+          schema:
+            $ref: '#/definitions/Heroes'
+  /heroes:
+    get:
+      summary: 'Return a list of heroes'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: 'Return a list of heroes'
+          headers:
+            Content-Type:
+              type: string
+          schema:
+            $ref: '#/definitions/Heroes'
+    post:
+      summary: 'Add a new hero'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: body
+          name: hero
+          required: true
+          schema:
+            "$ref": '#/definitions/Hero'
+      responses:
+        '200':
+          description: 'New hero'
+          headers:
+            Content-Type:
+              type: string
+          schema:
+            $ref: '#/definitions/Hero'
+    put:
+      summary: 'Update a hero'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: body
+          name: hero
+          required: true
+          schema:
+            "$ref": '#/definitions/Hero'
+      responses:
+        '200':
+          description: 'Updated hero'
+          headers:
+            Content-Type:
+              type: string
+          schema:
+            $ref: '#/definitions/Hero'
+  /heroes/{id}:
+    get:
+      summary: 'get hero by id'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: path
+          name: id
+          type: number
+          required: true
+      responses:
+        '200':
+          description: 'hero is found'
+          headers:
+            Content-Type:
+              type: string
+          schema:
+            $ref: '#/definitions/Hero'
+        '404':
+          description: 'hero is not found'
+          headers:
+            Content-Type:
+              type: string
+    delete:
+      summary: 'Delete a hero'
+      parameters:
+        - in: path
+          name: id
+          type: number
+          required: true
+      responses:
+        '200':
+          description: 'hero is deleted'
+          headers:
+            Content-Type:
+              type: string
+          schema:
+            $ref: '#/definitions/Hero'
+definitions:
+  Heroes:
+    type: array
+    items:
+      $ref: '#/definitions/Hero'
+  Hero:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: number
+      name:
+        type: string

@@ -1,0 +1,168 @@
+---
+paths:
+  /search/{name}:
+    get:
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods : "'*'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+            responseTemplates:
+              application/json: |-
+                #if ($input.params('name') == 'superman')
+                [{
+                  "id": 1,
+                  "name": "superman"
+                 }]
+                #elseif ($input.params('name') == 'batman')
+                [{
+                  "id": 2,
+                  "name": "batman"
+                }]
+                #else
+                []
+                #end
+        passthroughBehavior: when_no_match
+        requestTemplates:
+          application/json: |-
+            {
+              "statusCode": 200
+            }
+        type: mock
+  /heroes:
+    get:
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods : "'*'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+            responseTemplates:
+              application/json: |-
+                [{
+                  "id": 1,
+                  "name": "Superman"
+                 },
+                 {
+                   "id": 2,
+                   "name": "Batman"
+                 }]
+        passthroughBehavior: when_no_match
+        requestTemplates:
+          application/json: |-
+            {
+              "statusCode": 200
+            }
+        type: mock
+    post:
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods : "'*'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+            responseTemplates:
+              application/json: |-
+                {}
+        passthroughBehavior: when_no_match
+        requestTemplates:
+          application/json: |-
+            {
+              "statusCode": 200
+            }
+        type: mock
+    put:
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods : "'*'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+            responseTemplates:
+              application/json: |-
+                {}
+        passthroughBehavior: when_no_match
+        requestTemplates:
+          application/json: |-
+            {
+              "statusCode": 200
+            }
+        type: mock
+  /heroes/{id}:
+    get:
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods : "'*'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+            responseTemplates:
+              application/json: |-
+                #if ($input.params('id') == 1)
+                {
+                  "id": 1,
+                  "name": "superman"
+                 }
+                #elseif ($input.params('id') == 2)
+                {
+                  "id": 2,
+                  "name": "batman"
+                }
+                #else
+                  #set($context.responseOverride.status = 404)
+                #end
+        passthroughBehavior: when_no_match
+        requestTemplates:
+          application/json: |-
+            {
+              "statusCode": 200
+            }
+        type: mock
+    delete:
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods : "'*'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+            responseTemplates:
+              application/json: |-
+                #if ($input.params('id') == 1)
+                {
+                  "id": 1,
+                  "name": "superman"
+                 }
+                #elseif ($input.params('id') == 2)
+                {
+                  "id": 2,
+                  "name": "batman"
+                }
+                #else
+                  #set($context.responseOverride.status = 404)
+                #end
+        passthroughBehavior: when_no_match
+        requestTemplates:
+          application/json: |-
+            {
+              "statusCode": 200
+            }
+        type: mock

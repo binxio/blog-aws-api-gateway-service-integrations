@@ -1,0 +1,162 @@
+---
+paths:
+  /api/search/{name}:
+    get:
+      x-amazon-apigateway-integration:
+        credentials: !GetAtt APIGatewayRole.Arn
+        uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/Scan"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: |-
+                [
+                #foreach ($item in $input.path('$.Items'))
+                {
+                    "id": "$item.id.N",
+                    "name": "$item.name.S"
+                }
+                #if($foreach.hasNext), #end
+                #end
+                ]
+        requestTemplates:
+          application/json: !Sub |
+            {
+                "TableName": "${HeroesTable}",
+                "ScanFilter": {
+                  "name": {
+                    "AttributeValueList":[ {"S":"$input.params('name')"} ],
+                     "ComparisonOperator": "CONTAINS"
+                  }
+                }
+            }
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+  /api/heroes:
+    get:
+      x-amazon-apigateway-integration:
+        credentials: !GetAtt APIGatewayRole.Arn
+        uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/Scan"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: |-
+                [
+                #foreach ($item in $input.path('$.Items'))
+                {
+                    "id": "$item.id.N",
+                    "name": "$item.name.S"
+                }
+                #if($foreach.hasNext), #end
+                #end
+                ]
+        requestTemplates:
+          application/json: !Sub |
+            {
+                "TableName": "${HeroesTable}"
+            }
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+    post:
+      x-amazon-apigateway-integration:
+        credentials: !GetAtt APIGatewayRole.Arn
+        uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/PutItem"
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: !Sub |
+            {
+                "TableName": "${HeroesTable}",
+                "Item": {
+                    "id": {
+                        "N": $input.json('$.id')
+                    },
+                    "name": {
+                        "S": $input.json('$.name')
+                    }
+                }
+            }
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+    put:
+      x-amazon-apigateway-integration:
+        credentials: !GetAtt APIGatewayRole.Arn
+        uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/UpdateItem"
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: !Sub |
+            {
+                "TableName": "${HeroesTable}",
+                "Key": {
+                  "id": {
+                    "N": $input.json('$.id')
+                  }
+                },
+                "UpdateExpression": "SET #n = :p",
+                "ExpressionAttributeValues": {
+                  ":p": { "S" : $input.json('$.name') }
+                },
+                "ExpressionAttributeNames": {"#n":"name"}
+            }
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+  /api/heroes/{id}:
+    get:
+      x-amazon-apigateway-integration:
+        credentials: !GetAtt APIGatewayRole.Arn
+        uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/GetItem"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: |-
+                #if ($input.body == '{}')
+                  $input.body
+                #set($context.responseOverride.status = 404)
+                #else
+                {
+                  "id": $input.json('$.Item.id.N'),
+                  "name": $input.json('$.Item.name.S')
+                }
+                #end
+        requestTemplates:
+          application/json: !Sub |
+            {
+              "TableName": "${HeroesTable}",
+              "Key": {
+                "id": {
+                  "N": "$input.params('id')"
+                }
+              }
+            }
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+    delete:
+      x-amazon-apigateway-integration:
+        credentials: !GetAtt APIGatewayRole.Arn
+        uri: !Sub "arn:aws:apigateway:${AWS::Region}:dynamodb:action/DeleteItem"
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: !Sub |
+            {
+              "TableName": "${HeroesTable}",
+              "Key": {
+                "id": {
+                  "N": "$input.params('id')"
+                }
+              }
+            }
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
